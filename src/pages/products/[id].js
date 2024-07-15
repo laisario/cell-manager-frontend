@@ -1,22 +1,26 @@
+"use client"
 import Header from '@/components/Header'
 import { Box, Button, Card, CardActions, CardContent, CardMedia, Container, Typography } from '@mui/material'
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import axios from '../../api';
 import React, { useEffect, useState } from 'react'
-import { useParams } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 import { useRouter } from 'next/router';
 import FormProduct from '@/components/FormProduct';
 
 function ProductDetails() {
-    const { id } = useParams();
+    const path = usePathname();
+    const id = path?.split('/')[2]
     const [product, setProduct] = useState({});
     const [open, setOpen] = useState(false);
     const router = useRouter()
     useEffect(() => {
         (async () => {
-            const response = await axios.get(`/${id}`)
-            setProduct(response?.data)
+            if (id) {
+                const response = await axios.get(`/${id}`)
+                setProduct(response?.data)
+            }
         })()
     }, [])
     const deleteProduct = async() => { 
